@@ -4,6 +4,7 @@ views\DashboardView$1.class
 services\UserService.class
 views\CreateUserFormView$1.class
 views\LoginFormView$3.class
+views\CreateUserFormView$3.class
 views\DashboardView.class
 views\LoginFormView$2.class
 services\ApiService.class

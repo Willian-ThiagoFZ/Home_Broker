@@ -41,6 +41,7 @@ public class CreateUserFormView extends javax.swing.JFrame {
         input_email = new javax.swing.JTextField();
         input_password = new javax.swing.JTextField();
         btn_create = new javax.swing.JButton();
+        link_logon = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,6 +57,13 @@ public class CreateUserFormView extends javax.swing.JFrame {
         btn_create.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_createActionPerformed(evt);
+            }
+        });
+
+        link_logon.setText("Fazer o Login");
+        link_logon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                link_logonMouseClicked(evt);
             }
         });
 
@@ -79,7 +87,10 @@ public class CreateUserFormView extends javax.swing.JFrame {
                             .addComponent(input_password, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(135, 135, 135)
-                        .addComponent(btn_create)))
+                        .addComponent(btn_create))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(158, 158, 158)
+                        .addComponent(link_logon)))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -101,7 +112,9 @@ public class CreateUserFormView extends javax.swing.JFrame {
                 .addComponent(input_password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btn_create)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(link_logon)
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -124,12 +137,19 @@ public class CreateUserFormView extends javax.swing.JFrame {
             if (result) {
                 JOptionPane.showMessageDialog(null, "Este E-mail já Existe, digite um E-mail diferente !");
             } else {
-                
+                services.createNewUser(new_user);
+                JOptionPane.showMessageDialog(null, "Usuário criado com Sucesso, realize o Login");
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }//GEN-LAST:event_btn_createActionPerformed
+
+    private void link_logonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_link_logonMouseClicked
+        LoginFormView page = new LoginFormView();
+        page.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_link_logonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -175,5 +195,6 @@ public class CreateUserFormView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel link_logon;
     // End of variables declaration//GEN-END:variables
 }
