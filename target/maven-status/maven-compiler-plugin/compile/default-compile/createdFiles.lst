@@ -1,0 +1,16 @@
+views\CreateUserFormView$2.class
+views\LoginFormView$4.class
+views\DashboardView$1.class
+services\UserService.class
+views\CreateUserFormView$1.class
+views\LoginFormView$3.class
+views\DashboardView.class
+views\LoginFormView$2.class
+services\ApiService.class
+com\mycompany\home_broker\Home_broker.class
+views\LoginFormView.class
+views\LoginFormView$1.class
+models\UserDTO.class
+views\CreateUserFormView.class
+views\LoginFormView$5.class
+database\ConnectionMysql.class
