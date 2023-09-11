@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import models.UserDTO;
+import services.SessionsService;
 import services.UserService;
 
 /**
@@ -143,6 +144,9 @@ public class LoginFormView extends javax.swing.JFrame {
             UserService services = new UserService();
             ResultSet result_user = services.authenticateUSer(data_login_dto);
             if (result_user.next()) {
+                Integer id_user = result_user.getInt("id");
+                SessionsService session = new SessionsService();
+                session.createSession(id_user);
                 DashboardView objDaschboard = new DashboardView();
                 objDaschboard.setVisible(true);
                 dispose();

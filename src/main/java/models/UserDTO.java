@@ -4,7 +4,7 @@ package models;
 public class UserDTO {
     
     private int id;
-    private String name, password, email;
+    private String name, password, email, cpf;
 
     public int getId() {
         return id;
@@ -36,6 +36,14 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
     
 }

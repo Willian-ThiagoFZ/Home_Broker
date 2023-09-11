@@ -53,11 +53,12 @@ public class UserService {
         conn = new ConnectionMysql().connectDB();
 
         try {
-            String insert = "INSERT INTO grupo5_willian.users (name, password, email) VALUES(?, ?, ?);";
+            String insert = "INSERT INTO grupo5_willian.users (name, password, email, cpf) VALUES(?, ?, ?, ?);";
             pstm = conn.prepareStatement(insert);
             pstm.setString(1, obj_user.getName());
             pstm.setString(2, obj_user.getPassword());
             pstm.setString(3, obj_user.getEmail());
+            pstm.setString(4, obj_user.getCpf());
             
             pstm.execute();
             pstm.close();

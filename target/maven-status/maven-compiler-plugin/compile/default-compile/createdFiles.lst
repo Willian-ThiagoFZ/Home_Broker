@@ -1,11 +1,14 @@
 views\CreateUserFormView$2.class
 views\LoginFormView$4.class
 views\DashboardView$1.class
+views\DashboardView$2.class
 services\UserService.class
 views\CreateUserFormView$1.class
 views\LoginFormView$3.class
+views\DashboardView$3.class
 views\CreateUserFormView$3.class
 views\DashboardView.class
+services\SessionsService.class
 views\LoginFormView$2.class
 services\ApiService.class
 com\mycompany\home_broker\Home_broker.class

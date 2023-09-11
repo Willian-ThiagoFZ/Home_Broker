@@ -4,6 +4,12 @@
  */
 package views;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import models.UserDTO;
+import services.SessionsService;
+
 /**
  *
  * @author SUPORTE
@@ -15,6 +21,7 @@ public class DashboardView extends javax.swing.JFrame {
      */
     public DashboardView() {
         initComponents();
+        validSession();
     }
 
     /**
@@ -26,31 +33,106 @@ public class DashboardView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        log_out_dialog = new javax.swing.JDialog();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        txt_title = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel2.setText("Tem Certeza que deseja Fazer o Logout ?");
+
+        jButton1.setText("Logout");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout log_out_dialogLayout = new javax.swing.GroupLayout(log_out_dialog.getContentPane());
+        log_out_dialog.getContentPane().setLayout(log_out_dialogLayout);
+        log_out_dialogLayout.setHorizontalGroup(
+            log_out_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(log_out_dialogLayout.createSequentialGroup()
+                .addGroup(log_out_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(log_out_dialogLayout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel2))
+                    .addGroup(log_out_dialogLayout.createSequentialGroup()
+                        .addGap(225, 225, 225)
+                        .addComponent(jButton1)))
+                .addContainerGap(47, Short.MAX_VALUE))
+        );
+        log_out_dialogLayout.setVerticalGroup(
+            log_out_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(log_out_dialogLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(23, 23, 23))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("DASHBOARDD");
+        txt_title.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
+
+        jMenu1.setText("Minha Conta");
+
+        jMenuItem1.setText("Alterar Dados do Usuário");
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Cadastrar");
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Logout");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu3MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(147, 147, 147)
-                .addComponent(jLabel1)
-                .addContainerGap(175, Short.MAX_VALUE))
+            .addComponent(txt_title, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(85, 85, 85)
-                .addComponent(jLabel1)
-                .addContainerGap(199, Short.MAX_VALUE))
+                .addGap(15, 15, 15)
+                .addComponent(txt_title)
+                .addContainerGap(345, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+        SessionsService service = new SessionsService();
+        try {
+            service.LogoutSessions();
+            LoginFormView page = new LoginFormView();
+            page.setVisible(true);
+            dispose();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Dashboard Logout: " + ex);
+        }
+    }//GEN-LAST:event_jMenu3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -88,6 +170,34 @@ public class DashboardView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JDialog log_out_dialog;
+    private javax.swing.JLabel txt_title;
     // End of variables declaration//GEN-END:variables
+
+    private UserDTO session_user = new UserDTO();
+    
+    private void validSession() {
+        SessionsService functions = new SessionsService();
+        try {
+            ResultSet result = functions.getActualSession(true);
+            if (!result.next()){
+                LoginFormView page = new LoginFormView();
+                page.setVisible(true);
+                dispose();
+            }else{
+                session_user.setName(result.getString("name"));
+                session_user.setId(result.getInt("id"));
+                txt_title.setText("Bem-Vindo "+session_user.getName()+" - Uni Invest");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Dashboard Init: " + ex);
+        }
+    }
 }
