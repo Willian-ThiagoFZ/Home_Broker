@@ -4,11 +4,15 @@
  */
 package views;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
+import models.StockDTO;
 import models.UserDTO;
 import services.SessionsService;
+import services.StockService;
 
 /**
  *
@@ -20,8 +24,10 @@ public class DashboardView extends javax.swing.JFrame {
      * Creates new form DashboardView
      */
     public DashboardView() {
+        this.session_user = new UserDTO();
         initComponents();
         validSession();
+        getStocks();
     }
 
     /**
@@ -33,53 +39,287 @@ public class DashboardView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        log_out_dialog = new javax.swing.JDialog();
-        jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         txt_title = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        title_stock1 = new javax.swing.JLabel();
+        price_stock1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        title_stock2 = new javax.swing.JLabel();
+        price_stock2 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        title_stock3 = new javax.swing.JLabel();
+        price_stock3 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        title_stock4 = new javax.swing.JLabel();
+        price_stock4 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        title_stock5 = new javax.swing.JLabel();
+        price_stock5 = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        title_stock6 = new javax.swing.JLabel();
+        price_stock6 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        btn_update_stocks = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel2.setText("Tem Certeza que deseja Fazer o Logout ?");
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setForeground(new java.awt.Color(255, 255, 255));
 
-        jButton1.setText("Logout");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        txt_title.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
+
+        jPanel1.setBackground(new java.awt.Color(225, 46, 46));
+
+        title_stock1.setFont(new java.awt.Font("Arial Black", 2, 18)); // NOI18N
+        title_stock1.setForeground(new java.awt.Color(255, 255, 255));
+
+        price_stock1.setFont(new java.awt.Font("Fira Code", 0, 18)); // NOI18N
+        price_stock1.setForeground(new java.awt.Color(255, 255, 255));
+
+        jButton2.setText("Comprar");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(title_stock1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(price_stock1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jButton2)))))
+                .addContainerGap(40, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(title_stock1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(price_stock1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBackground(new java.awt.Color(225, 46, 46));
+
+        title_stock2.setFont(new java.awt.Font("Arial Black", 2, 18)); // NOI18N
+        title_stock2.setForeground(new java.awt.Color(255, 255, 255));
+
+        price_stock2.setFont(new java.awt.Font("Fira Code", 0, 18)); // NOI18N
+        price_stock2.setForeground(new java.awt.Color(255, 255, 255));
+
+        jButton3.setText("Comprar");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(price_stock2)
+                            .addComponent(title_stock2))
+                        .addGap(69, 69, 69))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(46, 46, 46))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(title_stock2)
+                .addGap(21, 21, 21)
+                .addComponent(price_stock2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(225, 46, 46));
+
+        title_stock3.setFont(new java.awt.Font("Arial Black", 2, 18)); // NOI18N
+        title_stock3.setForeground(new java.awt.Color(255, 255, 255));
+
+        price_stock3.setFont(new java.awt.Font("Fira Code", 0, 18)); // NOI18N
+        price_stock3.setForeground(new java.awt.Color(255, 255, 255));
+
+        jButton4.setText("Comprar");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(68, 68, 68)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(price_stock3)
+                            .addComponent(title_stock3)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(jButton4)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(title_stock3)
+                .addGap(18, 18, 18)
+                .addComponent(price_stock3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton4)
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBackground(new java.awt.Color(102, 51, 255));
+
+        title_stock4.setFont(new java.awt.Font("Arial Black", 2, 18)); // NOI18N
+        title_stock4.setForeground(new java.awt.Color(255, 255, 255));
+
+        price_stock4.setFont(new java.awt.Font("Fira Code", 0, 18)); // NOI18N
+        price_stock4.setForeground(new java.awt.Color(255, 255, 255));
+
+        jButton5.setText("Comprar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton5ActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout log_out_dialogLayout = new javax.swing.GroupLayout(log_out_dialog.getContentPane());
-        log_out_dialog.getContentPane().setLayout(log_out_dialogLayout);
-        log_out_dialogLayout.setHorizontalGroup(
-            log_out_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(log_out_dialogLayout.createSequentialGroup()
-                .addGroup(log_out_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(log_out_dialogLayout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(jLabel2))
-                    .addGroup(log_out_dialogLayout.createSequentialGroup()
-                        .addGap(225, 225, 225)
-                        .addComponent(jButton1)))
-                .addContainerGap(47, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(price_stock4)
+                    .addComponent(title_stock4))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton5)
+                .addGap(51, 51, 51))
         );
-        log_out_dialogLayout.setVerticalGroup(
-            log_out_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(log_out_dialogLayout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(23, 23, 23))
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(title_stock4)
+                .addGap(18, 18, 18)
+                .addComponent(price_stock4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(jButton5)
+                .addContainerGap())
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jPanel5.setBackground(new java.awt.Color(102, 51, 255));
 
-        txt_title.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
+        title_stock5.setFont(new java.awt.Font("Arial Black", 2, 18)); // NOI18N
+        title_stock5.setForeground(new java.awt.Color(255, 255, 255));
+
+        price_stock5.setFont(new java.awt.Font("Fira Code", 0, 18)); // NOI18N
+        price_stock5.setForeground(new java.awt.Color(255, 255, 255));
+
+        jButton6.setText("Comprar");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(54, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(price_stock5)
+                            .addComponent(title_stock5))
+                        .addGap(64, 64, 64))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(jButton6)
+                        .addGap(48, 48, 48))))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(title_stock5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(price_stock5)
+                .addGap(18, 18, 18)
+                .addComponent(jButton6)
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
+
+        jPanel6.setBackground(new java.awt.Color(102, 51, 255));
+
+        title_stock6.setFont(new java.awt.Font("Arial Black", 2, 18)); // NOI18N
+        title_stock6.setForeground(new java.awt.Color(255, 255, 255));
+
+        price_stock6.setFont(new java.awt.Font("Fira Code", 0, 18)); // NOI18N
+        price_stock6.setForeground(new java.awt.Color(255, 255, 255));
+
+        jButton7.setText("Comprar");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap(53, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(price_stock6)
+                            .addComponent(title_stock6))
+                        .addGap(67, 67, 67))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(jButton7)
+                        .addGap(49, 49, 49))))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(title_stock6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(price_stock6)
+                .addGap(18, 18, 18)
+                .addComponent(jButton7)
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
+
+        btn_update_stocks.setText("Atualizar Ações");
+        btn_update_stocks.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_update_stocksMouseClicked(evt);
+            }
+        });
 
         jMenu1.setText("Minha Conta");
 
@@ -89,6 +329,13 @@ public class DashboardView extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Cadastrar");
+
+        jMenuItem2.setText("Contas");
+        jMenu2.add(jMenuItem2);
+
+        jMenuItem3.setText("Corretora");
+        jMenu2.add(jMenuItem3);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Logout");
@@ -105,34 +352,64 @@ public class DashboardView extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txt_title, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(txt_title, javax.swing.GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE)
+                .addGap(87, 87, 87))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(65, 65, 65)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(56, 56, 56)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(317, 317, 317)
+                        .addComponent(btn_update_stocks)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(txt_title)
-                .addContainerGap(345, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btn_update_stocks)
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(128, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
-        SessionsService service = new SessionsService();
-        try {
-            service.LogoutSessions();
-            LoginFormView page = new LoginFormView();
-            page.setVisible(true);
-            dispose();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Dashboard Logout: " + ex);
-        }
+        //new LogOutDialogView(null,true).show();
     }//GEN-LAST:event_jMenu3MouseClicked
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+       // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void btn_update_stocksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_update_stocksMouseClicked
+        getStocks();
+    }//GEN-LAST:event_btn_update_stocksMouseClicked
 
     /**
      * @param args the command line arguments
@@ -170,18 +447,42 @@ public class DashboardView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btn_update_stocks;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JDialog log_out_dialog;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JLabel price_stock1;
+    private javax.swing.JLabel price_stock2;
+    private javax.swing.JLabel price_stock3;
+    private javax.swing.JLabel price_stock4;
+    private javax.swing.JLabel price_stock5;
+    private javax.swing.JLabel price_stock6;
+    private javax.swing.JLabel title_stock1;
+    private javax.swing.JLabel title_stock2;
+    private javax.swing.JLabel title_stock3;
+    private javax.swing.JLabel title_stock4;
+    private javax.swing.JLabel title_stock5;
+    private javax.swing.JLabel title_stock6;
     private javax.swing.JLabel txt_title;
     // End of variables declaration//GEN-END:variables
 
-    private UserDTO session_user = new UserDTO();
+    private final UserDTO session_user;
     
     private void validSession() {
         SessionsService functions = new SessionsService();
@@ -198,6 +499,47 @@ public class DashboardView extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Dashboard Init: " + ex);
+        }
+    }
+    
+    private void getStocks() {
+        StockService service = new StockService();
+        List<StockDTO> stock_list;
+        try {
+            stock_list = service.find_stocks("AAPL,TSLA,GOGL,AMZN,MSFT,IBM");
+            for (int i = 0; i < stock_list.size(); i++) {
+                StockDTO stock = stock_list.get(i);
+                String title = stock.getSymbol();
+                String price = Float.toString(stock.getAsk());
+                switch (title) {
+                    case "AAPL" -> {
+                        title_stock1.setText(title);
+                        price_stock1.setText("$ "+price);
+                    }
+                    case "TSLA" -> {
+                        title_stock2.setText(title);
+                        price_stock2.setText("$ "+price);
+                    }
+                    case "GOGL" -> {
+                        title_stock3.setText(title);
+                        price_stock3.setText("$ "+price);
+                    }
+                    case "AMZN" -> {
+                        title_stock4.setText(title);
+                        price_stock4.setText("$ "+price);
+                    }
+                    case "MSFT" -> {
+                        title_stock5.setText(title);
+                        price_stock5.setText("$ "+price);
+                    }
+                    case "IBM" -> {
+                        title_stock6.setText(title);
+                        price_stock6.setText("$ "+price);
+                    }
+                }
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Get Stocks: " + ex);
         }
     }
 }
