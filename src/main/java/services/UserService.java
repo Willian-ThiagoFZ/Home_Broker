@@ -66,4 +66,22 @@ public class UserService {
             JOptionPane.showMessageDialog(null, "Service Usuario: " + error.getMessage());
         }
     }
+    
+    public void updateUser(UserDTO obj_user) {
+        conn = new ConnectionMysql().connectDB();
+
+        try {
+            String insert = "UPDATE grupo5_willian.users SET name=?, email=?, cpf=? WHERE id=?;";
+            pstm = conn.prepareStatement(insert);
+            pstm.setString(1, obj_user.getName());
+            pstm.setString(2, obj_user.getEmail());
+            pstm.setString(3, obj_user.getCpf());
+            pstm.setInt(4, obj_user.getId());
+            
+            pstm.execute();
+            pstm.close();
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(null, "Service Usuario: " + error.getMessage());
+        }
+    }
 }

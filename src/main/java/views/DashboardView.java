@@ -13,6 +13,7 @@ import models.StockDTO;
 import models.UserDTO;
 import services.SessionsService;
 import services.StockService;
+import views.Dialogs.users.UpdateUserDialogView;
 
 /**
  *
@@ -324,6 +325,16 @@ public class DashboardView extends javax.swing.JFrame {
         jMenu1.setText("Minha Conta");
 
         jMenuItem1.setText("Alterar Dados do Usuário");
+        jMenuItem1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuItem1MouseClicked(evt);
+            }
+        });
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
@@ -411,6 +422,13 @@ public class DashboardView extends javax.swing.JFrame {
         getStocks();
     }//GEN-LAST:event_btn_update_stocksMouseClicked
 
+    private void jMenuItem1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseClicked
+    }//GEN-LAST:event_jMenuItem1MouseClicked
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        new UpdateUserDialogView(null,true, this.session_user).show();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -495,6 +513,8 @@ public class DashboardView extends javax.swing.JFrame {
             }else{
                 session_user.setName(result.getString("name"));
                 session_user.setId(result.getInt("id"));
+                session_user.setCpf(result.getString("cpf"));
+                session_user.setEmail(result.getString("email"));
                 txt_title.setText("Bem-Vindo "+session_user.getName()+" - Uni Invest");
             }
         } catch (SQLException ex) {

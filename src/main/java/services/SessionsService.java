@@ -49,7 +49,9 @@ public class SessionsService {
             String select = """
                 select
                     u.id,
-                    u.name
+                    u.name,
+                    u.cpf,
+                    u.email
                 from
                     grupo5_willian.sessions s2
                 join grupo5_willian.users u on
