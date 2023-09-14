@@ -60,7 +60,7 @@ public class BrokerService {
             pstm.setInt(1, id_broker);
             pstm.execute();
         } catch (SQLException error) {
-            JOptionPane.showMessageDialog(null, "Service Usuario Update: " + error.getMessage());
+            JOptionPane.showMessageDialog(null, "Service Broker Delete: " + error.getMessage());
         }finally {
             pstm.close();
             conn.close();
@@ -70,7 +70,7 @@ public class BrokerService {
     
     public ArrayList<BrokerDTO> getAllBrokers() throws SQLException{
         conn = new ConnectionMysql().connectDB();
-        String select = "select * from grupo5_willian.broker;";
+        String select = "select * from grupo5_willian.broker order by name;";
         
         try{
             pstm = conn.prepareStatement(select);
