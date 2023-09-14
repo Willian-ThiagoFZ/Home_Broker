@@ -4,12 +4,16 @@
  */
 package views;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import models.BrokerDTO;
+import models.UserDTO;
 import services.BrokerService;
+import services.SessionsService;
+import views.Dialogs.broker.DeleteBrokerDialogView;
 
 /**
  *
@@ -21,8 +25,10 @@ public class BrokerControlView extends javax.swing.JFrame {
      * Creates new form BrokerControlView
      */
     public BrokerControlView() {
+        this.session_user = new UserDTO();
         initComponents();
         buildListOfBrokers();
+        validSession();
     }
 
     /**
@@ -37,10 +43,13 @@ public class BrokerControlView extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         input_name_broker = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btn_create = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_borkers = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
+        load_data = new javax.swing.JButton();
+        btn_delete = new javax.swing.JButton();
+        btn_update = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,11 +58,11 @@ public class BrokerControlView extends javax.swing.JFrame {
 
         jLabel2.setText("Nome da Corretora:");
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton1.setText("Cadastrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_create.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_create.setText("Cadastrar");
+        btn_create.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_createActionPerformed(evt);
             }
         });
 
@@ -66,8 +75,31 @@ public class BrokerControlView extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(table_borkers);
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Corretoras Cadastradas");
+
+        load_data.setText("Carregar Dados");
+        load_data.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                load_dataActionPerformed(evt);
+            }
+        });
+
+        btn_delete.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_delete.setText("Excluir");
+        btn_delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_deleteActionPerformed(evt);
+            }
+        });
+
+        btn_update.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_update.setText("Editar");
+        btn_update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_updateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -76,46 +108,59 @@ public class BrokerControlView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(input_name_broker, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(138, 138, 138)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(112, 112, 112)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(load_data))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(input_name_broker, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(btn_create, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btn_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btn_update, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(39, 39, 39)))))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(14, 14, 14)
                 .addComponent(jLabel1)
-                .addGap(30, 30, 30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(input_name_broker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_create)
+                    .addComponent(btn_delete)
+                    .addComponent(btn_update))
+                .addGap(43, 43, 43)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(load_data))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
         String name = input_name_broker.getText();
         if (!name.trim().isEmpty()) {
             try {
@@ -123,11 +168,42 @@ public class BrokerControlView extends javax.swing.JFrame {
                 service.createNewBroker(name);
                 JOptionPane.showMessageDialog(null, "Criado com Sucesso");
                 input_name_broker.setText("");
-            } catch (Exception ex) {
+                buildListOfBrokers();
+            } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro: " + ex);
             }
+        }else{
+            JOptionPane.showMessageDialog(null, "Preencha Corretamente o campo de Nome");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btn_createActionPerformed
+
+    private void load_dataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_load_dataActionPerformed
+        broker = getDataRowSelected();
+        input_name_broker.setText(broker.getName());
+    }//GEN-LAST:event_load_dataActionPerformed
+
+    private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
+        BrokerDTO broker_delete = getDataRowSelected();
+        new DeleteBrokerDialogView(null,true, broker_delete).show();
+        buildListOfBrokers();
+    }//GEN-LAST:event_btn_deleteActionPerformed
+
+    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
+        String name = input_name_broker.getText();
+        if (!name.trim().isEmpty() && !name.trim().equals(broker.getName())) {
+            try {
+                BrokerService service = new BrokerService();
+                service.updateBroker(name, broker.getId());
+                JOptionPane.showMessageDialog(null, "Alterado Com Sucesso");
+                input_name_broker.setText("");
+                buildListOfBrokers();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro: " + ex);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Preencha Corretamente o campo de Nome");
+        }
+    }//GEN-LAST:event_btn_updateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,15 +241,21 @@ public class BrokerControlView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_create;
+    private javax.swing.JButton btn_delete;
+    private javax.swing.JButton btn_update;
     private javax.swing.JTextField input_name_broker;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton load_data;
     private javax.swing.JTable table_borkers;
     // End of variables declaration//GEN-END:variables
 
+    private BrokerDTO broker = new BrokerDTO();
+    private final UserDTO session_user;
+    
     private void buildListOfBrokers() {
         BrokerService service = new BrokerService();
         try {
@@ -190,6 +272,39 @@ public class BrokerControlView extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro Ao Listar Brokers: " + ex);
+        }
+    }
+    
+    private BrokerDTO getDataRowSelected(){
+        BrokerDTO broker = new BrokerDTO();
+        try{
+            int index_row = table_borkers.getSelectedRow();
+            int id_selected = Integer.parseInt(table_borkers.getModel().getValueAt(index_row, 0).toString());
+            broker.setId(id_selected);
+            broker.setName(table_borkers.getModel().getValueAt(index_row, 1).toString());
+        } catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao Carregar os Dados: " + ex);
+        }
+        
+        return broker;
+    }
+    
+    private void validSession() {
+        SessionsService functions = new SessionsService();
+        try {
+            ResultSet result = functions.getActualSession(true);
+            if (!result.next()){
+                LoginFormView page = new LoginFormView();
+                page.setVisible(true);
+                dispose();
+            }else{
+                session_user.setName(result.getString("name"));
+                session_user.setId(result.getInt("id"));
+                session_user.setCpf(result.getString("cpf"));
+                session_user.setEmail(result.getString("email"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Dashboard Init: " + ex);
         }
     }
 }

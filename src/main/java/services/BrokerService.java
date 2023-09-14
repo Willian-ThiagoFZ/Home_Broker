@@ -16,7 +16,7 @@ public class BrokerService {
     ResultSet rs;
     ArrayList<BrokerDTO> response_brokers = new ArrayList<>();
     
-    public void createNewBroker(String broker_name) {
+    public void createNewBroker(String broker_name) throws SQLException {
         conn = new ConnectionMysql().connectDB();
 
         try {
@@ -24,10 +24,48 @@ public class BrokerService {
             pstm = conn.prepareStatement(insert);
             pstm.setString(1, broker_name);
             pstm.execute();
-            pstm.close();
         } catch (SQLException error) {
-            JOptionPane.showMessageDialog(null, "Service Usuario: " + error.getMessage());
+            JOptionPane.showMessageDialog(null, "Service Usuario Create: " + error.getMessage());
+        }finally {
+            pstm.close();
+            conn.close();
         }
+      
+    }
+    
+    public void updateBroker(String broker_name, int id_broker) throws SQLException {
+        conn = new ConnectionMysql().connectDB();
+
+        try {
+            String update = "UPDATE grupo5_willian.broker SET name=? WHERE id=?;";
+            pstm = conn.prepareStatement(update);
+            pstm.setString(1, broker_name);
+            pstm.setInt(2, id_broker);
+            pstm.execute();
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(null, "Service Usuario Update: " + error.getMessage());
+        }finally {
+            pstm.close();
+            conn.close();
+        }
+      
+    }
+    
+    public void deleteBroker(int id_broker) throws SQLException {
+        conn = new ConnectionMysql().connectDB();
+
+        try {
+            String delete = "DELETE FROM grupo5_willian.broker WHERE id=?;";
+            pstm = conn.prepareStatement(delete);
+            pstm.setInt(1, id_broker);
+            pstm.execute();
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(null, "Service Usuario Update: " + error.getMessage());
+        }finally {
+            pstm.close();
+            conn.close();
+        }
+      
     }
     
     public ArrayList<BrokerDTO> getAllBrokers() throws SQLException{

@@ -21,6 +21,10 @@ public class BrokerDTO {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Object get(int row) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
     
     
