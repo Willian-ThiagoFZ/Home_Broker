@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import models.AccountDTO;
 
@@ -88,6 +90,58 @@ public class AccountService {
                 account.setUser_id(rs.getInt("user_id"));
                 account.setBroker_id(rs.getInt("broker_id"));
                 account.setNumber_account(rs.getString("number_account"));
+                account.setType_account(rs.getString("type_account"));
+                account.setBalance(rs.getDouble("balance"));
+                
+                response_accounts.add(account);
+            }
+            
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(null, "Service Account: " + error.getMessage());
+        } finally {
+            rs.close();
+            conn.close();
+        }
+        
+        return response_accounts;
+    }
+    
+    public ArrayList<AccountDTO> getAllAccountsToFinancial(int user_id) throws SQLException{
+        conn = new ConnectionMysql().connectDB();
+        
+        String select = """
+            select
+            	a.id,
+            	b.name,
+            	a.number_account,
+            	a.type_account,
+            	a.balance
+            from
+            	grupo5_willian.accounts a
+            join grupo5_willian.broker b on
+            	b.id  = a.broker_id
+            where 
+            	a.type_account = 'Conta Real'
+            	and a.user_id = ?
+        """;
+        
+        try{
+            pstm = conn.prepareStatement(select);
+            pstm.setInt(1, user_id);
+            rs = pstm.executeQuery();
+            
+            while (rs.next()) {
+                AccountDTO account = new AccountDTO();
+                int id_account = rs.getInt("id");
+                String name_broker = rs.getString("name");
+                String number_account = rs.getString("number_account");
+                String type_account = rs.getString("type_account");
+                String balance = String.valueOf(rs.getDouble("balance"));
+                
+                String join_text = "Corretora: " + name_broker + " | Conta: " + number_account + " (" + type_account + ") | Saldo: " + balance;
+                
+                account.setId(id_account);
+                account.setNumber_account(join_text);
                 account.setType_account(rs.getString("type_account"));
                 account.setBalance(rs.getDouble("balance"));
                 
