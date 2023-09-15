@@ -25,6 +25,10 @@ public class StockService {
         StockDTO[] list_stocks_response = gson.fromJson(response, StockDTO[].class);
         List<StockDTO> stocks_list = Arrays.asList(list_stocks_response);
         String url = "https://api.finage.co.uk/last/stocks/?apikey="+apiKey+"&symbols="+stocks;
+        
+        //https://docs.marketdata.app/api/stocks/quotes
+        //https://api.marketdata.app/v1/stocks/quotes/AAPL/
+        //https://finage.co.uk/docs/api/multiple-stock-last-quotes
         /*HttpGet request = new HttpGet(url);
         try(CloseableHttpClient httpClient = HttpClientBuilder.create().disableDefaultUserAgent().build();
                 CloseableHttpResponse response = httpClient.execute(request)){

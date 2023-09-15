@@ -9,6 +9,7 @@ views\AccountControlView$4.class
 views\FinancialPage.class
 models\MovementAccountDTO.class
 services\BrokerService.class
+views\Dialogs\orders\BoletaDialogView$2.class
 views\Dialogs\users\UpdateUserDialogView.class
 views\Dialogs\account\UpdateBalanceAccountDialogView$3.class
 views\LoginFormView$1.class
@@ -24,6 +25,7 @@ views\BrokerControlView.class
 views\Dialogs\account\DeleteAccountDialogView$2.class
 views\DashboardView$2.class
 views\AccountControlView$5.class
+views\Dialogs\orders\BoletaDialogView.class
 views\LoginFormView$2.class
 views\Dialogs\financial\FinancialControlDialogView$2$1.class
 models\BrokerDTO.class
@@ -52,9 +54,11 @@ views\Dialogs\account\UpdateBalanceAccountDialogView$3$1.class
 services\SessionsService.class
 views\BrokerControlView$5.class
 views\Dialogs\account\DeleteAccountDialogView$1.class
+views\Dialogs\orders\BoletaDialogView$2$1.class
 views\BrokerControlView$1.class
 com\mycompany\home_broker\Home_broker.class
 models\AccountDTO.class
+views\Dialogs\orders\BoletaDialogView$1.class
 views\Dialogs\users\LogOutDialogView$2$1.class
 views\Dialogs\broker\DeleteBrokerDialogView$1.class
 views\Dialogs\users\LogOutDialogView$1.class

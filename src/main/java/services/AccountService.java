@@ -61,7 +61,7 @@ public class AccountService {
         conn = new ConnectionMysql().connectDB();
 
         try {
-            String update = "UPDATE grupo5_willian.accounts SET balance=? WHERE id=?;;";
+            String update = "UPDATE grupo5_willian.accounts SET balance=? WHERE id=?;";
             pstm = conn.prepareStatement(update);
             pstm.setDouble(1, new_balance);
             pstm.setInt(2, id_account);
@@ -77,7 +77,7 @@ public class AccountService {
     
     public ArrayList<AccountDTO> getAllAccounts(int user_id) throws SQLException{
         conn = new ConnectionMysql().connectDB();
-        String select = "select * from grupo5_willian.accounts where user_id = ?";
+        String select = "select * from grupo5_willian.accounts where user_id = ?;";
         
         try{
             pstm = conn.prepareStatement(select);

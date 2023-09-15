@@ -137,16 +137,35 @@ public class FinancialControlDialogView extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String valor = input_new_valor.getText().trim();
+        Double new_balance;
         if (!valor.isEmpty() && box_accounts.getSelectedIndex() != 0 && box_tipo.getSelectedIndex() != 0){
-            Double saldo = Double.parseDouble(valor.replace(",", "."));
+            Double price = Double.parseDouble(valor.replace(",", "."));
             int id_account = ids_accounts.get(box_accounts.getSelectedIndex() - 1);
             String tipo = (String) box_tipo.getSelectedItem();
             MovementAccountDTO movement = new MovementAccountDTO();
             movement.setAccount_id(id_account);
             movement.setTypeMovement(tipo);
-            movement.setPrice(saldo);
-            FinancialService service = new FinancialService();
-            service.createNewMovement(movement);
+            movement.setPrice(price);
+            movement.setUser_id(user.getId());
+            AccountDTO conta_selected = map_accounts.get(id_account);
+            boolean valid = validMovement(conta_selected.getBalance(), price, tipo);
+            if(valid){
+                try {
+                    if (tipo.equals("Depósito")){
+                        new_balance = conta_selected.getBalance() + price;
+                    }else{
+                        new_balance = conta_selected.getBalance() - price;
+                    }
+                    FinancialService service = new FinancialService();
+                    service.createNewMovement(movement, new_balance);
+                    JOptionPane.showMessageDialog(null, "Operação Concluída !!");
+                    dispose();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Erro Cadastrar Movimento: " + ex);
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Você não tem Saldo Suficiente nesta conta para Esta Operação");
+            }
         }else{
             JOptionPane.showMessageDialog(null, "Preencha Corretamente o Formulário");
         }
@@ -224,5 +243,12 @@ public class FinancialControlDialogView extends javax.swing.JDialog {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro Ao Listar Contas: " + ex);
         }
+    }
+    
+    private boolean validMovement(Double balance, Double price, String tipo_operacao){
+        if (tipo_operacao.equals("Saque") && price > balance){
+            return false;
+        }
+        return true;
     }
 }

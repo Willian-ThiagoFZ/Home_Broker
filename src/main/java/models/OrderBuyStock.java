@@ -4,9 +4,18 @@ package models;
 
 public class OrderBuyStock {
     
-    private Integer id, account_id, quantity;
+    private Integer id, account_id, quantity, user_id;
     private String stock;
     private double buy_price, sold_price, total_amount_invest, total_amount_returns;
+    private boolean open_operation;
+    
+    public boolean isOpen_operation() {
+        return open_operation;
+    }
+
+    public void setOpen_operation(boolean open_operation) {
+        this.open_operation = open_operation;
+    }
 
     public Integer getId() {
         return id;
@@ -70,6 +79,14 @@ public class OrderBuyStock {
 
     public void setTotal_amount_returns(double total_amount_returns) {
         this.total_amount_returns = total_amount_returns;
+    }
+
+    public Integer getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
     
 }
