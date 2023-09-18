@@ -158,4 +158,95 @@ public class AccountService {
         return response_accounts;
     }
     
+    public ArrayList<AccountDTO> getAllAccountsToCreateOrders(int user_id) throws SQLException{
+        conn = new ConnectionMysql().connectDB();
+        
+        String select = """
+            select
+            	a.id,
+            	b.name,
+            	a.number_account,
+            	a.type_account,
+            	a.balance
+            from
+            	grupo5_willian.accounts a
+            join grupo5_willian.broker b on
+            	b.id  = a.broker_id
+            where
+            	a.user_id = ?
+        """;
+        
+        try{
+            pstm = conn.prepareStatement(select);
+            pstm.setInt(1, user_id);
+            rs = pstm.executeQuery();
+            
+            while (rs.next()) {
+                AccountDTO account = new AccountDTO();
+                int id_account = rs.getInt("id");
+                String name_broker = rs.getString("name");
+                String number_account = rs.getString("number_account");
+                String type_account = rs.getString("type_account");
+                String balance = String.valueOf(rs.getDouble("balance"));
+                
+                String join_text = "Corretora: " + name_broker + " | Conta: " + number_account + " (" + type_account + ") | Saldo: " + balance;
+                
+                account.setId(id_account);
+                account.setNumber_account(join_text);
+                account.setType_account(rs.getString("type_account"));
+                account.setBalance(rs.getDouble("balance"));
+                
+                response_accounts.add(account);
+            }
+            
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(null, "Service Account: " + error.getMessage());
+        } finally {
+            rs.close();
+            conn.close();
+        }
+        
+        return response_accounts;
+    }
+    
+    
+    public Map<Integer, Double> getBalanceOfAccount(int id_order) throws SQLException{
+        conn = new ConnectionMysql().connectDB();
+        Map<Integer, Double> account = new HashMap<Integer, Double>();
+        
+        String select = """
+            select
+                id,
+                balance
+            from
+                grupo5_willian.accounts
+            where
+                id = (
+                select
+                    o.account_id
+                from
+                    grupo5_willian.orders o
+                where
+                    o.id = ?);
+        """;
+        
+        try{
+            pstm = conn.prepareStatement(select);
+            pstm.setInt(1, id_order);
+            rs = pstm.executeQuery();
+            
+            while (rs.next()) {
+                account.put(rs.getInt("id"), rs.getDouble("balance"));
+            }
+            
+        } catch (SQLException error) {
+            JOptionPane.showMessageDialog(null, "Service Get Balance Account: " + error.getMessage());
+        } finally {
+            rs.close();
+            conn.close();
+        }
+        
+        return account;
+    }
+    
 }

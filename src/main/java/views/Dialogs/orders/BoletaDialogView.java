@@ -4,6 +4,18 @@
  */
 package views.Dialogs.orders;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import models.AccountDTO;
+import models.OrderBuyStock;
+import services.AccountService;
+import services.OrderService;
+
 /**
  *
  * @author SUPORTE
@@ -13,9 +25,15 @@ public class BoletaDialogView extends javax.swing.JDialog {
     /**
      * Creates new form BoletaDialogView
      */
-    public BoletaDialogView(java.awt.Frame parent, boolean modal) {
+    public BoletaDialogView(java.awt.Frame parent, boolean modal, String stock, String price, int user_id) {
         super(parent, modal);
         initComponents();
+        setData(stock, price, user_id);
+        loadAccountData(user_id);
+    }
+
+    private BoletaDialogView(JFrame jFrame, boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     /**
@@ -37,13 +55,15 @@ public class BoletaDialogView extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         qts_stock = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        lbl_total_value = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Boleta de Compra da Ação");
 
-        box_account.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        box_account.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel2.setText("Ação: ");
@@ -58,14 +78,32 @@ public class BoletaDialogView extends javax.swing.JDialog {
         jLabel4.setText("Selecione a Conta:");
 
         jButton1.setText("Comprar Ação");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        jLabel5.setText("Quantidade:");
+        jLabel5.setText("Quantidade de Ações (Valor Cheio) :");
 
+        qts_stock.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                qts_stockPropertyChange(evt);
+            }
+        });
         qts_stock.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 qts_stockKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                qts_stockKeyReleased(evt);
+            }
         });
+
+        jLabel6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel6.setText("Valor Total:");
+
+        lbl_total_value.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,15 +126,20 @@ public class BoletaDialogView extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addComponent(lbl_stock_name))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4)
-                            .addComponent(box_account, 0, 474, Short.MAX_VALUE)
-                            .addComponent(jLabel5)
-                            .addComponent(qts_stock)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(198, 198, 198)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lbl_total_value))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel4)
+                                .addComponent(box_account, 0, 474, Short.MAX_VALUE)
+                                .addComponent(jLabel5)
+                                .addComponent(qts_stock)))))
                 .addContainerGap(58, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -120,7 +163,11 @@ public class BoletaDialogView extends javax.swing.JDialog {
                 .addComponent(jLabel5)
                 .addGap(5, 5, 5)
                 .addComponent(qts_stock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(lbl_total_value))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(31, 31, 31))
         );
@@ -130,9 +177,56 @@ public class BoletaDialogView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void qts_stockKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_qts_stockKeyPressed
-        //evt.getKeyChar();
-        System.out.println(evt.getKeyChar());
     }//GEN-LAST:event_qts_stockKeyPressed
+
+    private void qts_stockPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_qts_stockPropertyChange
+    }//GEN-LAST:event_qts_stockPropertyChange
+
+    private void qts_stockKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_qts_stockKeyReleased
+        String quantity = qts_stock.getText();
+        if (String.valueOf(evt.getKeyChar()).matches("[0-9]*") || evt.getKeyCode() == 8){
+            if (!quantity.isEmpty()){
+                double pay_price = stock_price * Integer.parseInt(quantity);
+                lbl_total_value.setText("$ "+String.valueOf(pay_price));
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Digite apenas números neste campo !!");
+            qts_stock.setText(quantity.replaceAll("[^0-9]", ""));
+        }
+    }//GEN-LAST:event_qts_stockKeyReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String quantity = qts_stock.getText();
+        Double new_balance;
+        if (!quantity.isEmpty() && box_account.getSelectedIndex() != 0){
+            double pay_price = stock_price * Integer.parseInt(quantity);
+            int id_account = select_id_accounts.get(box_account.getSelectedIndex() - 1);
+            OrderBuyStock order = new OrderBuyStock();
+            AccountDTO conta_selected = map_accounts.get(id_account);
+            boolean valid = validOrder(conta_selected.getBalance(), pay_price);
+            if(valid){
+                order.setAccount_id(id_account);
+                order.setQuantity(Integer.valueOf(quantity));
+                order.setStock(stock_symbol);
+                order.setBuy_price(stock_price);
+                order.setTotal_amount_invest(pay_price);
+                order.setUser_id(id_user);
+                try {
+                    new_balance = conta_selected.getBalance() - pay_price;
+                    OrderService service = new OrderService();
+                    service.createNewOrder(order, new_balance, pay_price);
+                    JOptionPane.showMessageDialog(null, "Operação Concluída !!");
+                    dispose();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Erro Cadastrar Esta Ordem de Compra: " + ex);
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Você não tem Saldo Suficiente nesta conta para Comprar Esta Ação");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Preencha Corretamente o Formulário");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -184,8 +278,48 @@ public class BoletaDialogView extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lbl_stock_name;
     private javax.swing.JLabel lbl_stock_preco;
+    private javax.swing.JLabel lbl_total_value;
     private javax.swing.JTextField qts_stock;
     // End of variables declaration//GEN-END:variables
+
+    
+    private double stock_price;
+    private String stock_symbol;
+    private int id_user;
+    Vector<Integer> select_id_accounts = new Vector<Integer>();
+    Map<Integer, AccountDTO> map_accounts = new HashMap<Integer, AccountDTO>();
+    
+    private void setData(String stock, String price, int user_id) {
+        lbl_stock_name.setText(stock);
+        lbl_stock_preco.setText(price);
+        stock_price = Double.parseDouble(price.replaceAll("[^0-9.]", ""));
+        stock_symbol = stock;
+        id_user = user_id;
+    }
+
+    private void loadAccountData(int user_id) {
+        AccountService service = new AccountService();
+        try {
+            ArrayList<AccountDTO> list_account = service.getAllAccountsToCreateOrders(user_id);
+            for (int i = 0; i < list_account.size(); i++ ){
+                int id_account = list_account.get(i).getId();
+                String name_broker = list_account.get(i).getNumber_account();
+                select_id_accounts.addElement(id_account);
+                box_account.addItem(name_broker);
+                map_accounts.put(id_account, list_account.get(i));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar as Contas: " + ex);
+        }
+    }
+    
+    private boolean validOrder(Double balance, Double pay_price){
+        if (pay_price > balance){
+            return false;
+        }
+        return true;
+    }
 }

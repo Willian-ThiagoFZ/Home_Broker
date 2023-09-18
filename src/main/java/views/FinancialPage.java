@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import models.OrderBuyStock;
 import models.UserDTO;
 import services.FinancialService;
+import services.OrderService;
 import services.SessionsService;
 import views.Dialogs.financial.FinancialControlDialogView;
 
@@ -29,6 +31,7 @@ public class FinancialPage extends javax.swing.JFrame {
         this.session_user = new UserDTO();
         validSession();
         loadMovements();
+        loadOrdersClosed();
     }
 
     /**
@@ -50,6 +53,11 @@ public class FinancialPage extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         lbl_saques_price = new javax.swing.JLabel();
         lbl_saques_size = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        table_closed_orders = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -145,6 +153,42 @@ public class FinancialPage extends javax.swing.JFrame {
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
+        table_closed_orders.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+            },
+            new String [] {
+                "ID", "Ação", "Quantidade", "Preço de Compra", "Total Investido", "Preço de Venda", "Total de Retorno", "Lucro Obtido"
+            }
+        ));
+        jScrollPane2.setViewportView(table_closed_orders);
+
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel3.setText("Operações Realizadas");
+
+        jPanel3.setBackground(new java.awt.Color(102, 102, 255));
+
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Total de Compras em Ações");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jLabel4)
+                .addContainerGap(51, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addContainerGap(78, Short.MAX_VALUE))
+        );
+
         jMenu1.setText("Voltar para Dashboard");
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -176,13 +220,26 @@ public class FinancialPage extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 15, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 98, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(44, 44, 44)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,7 +251,13 @@ public class FinancialPage extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(46, 46, 46)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(196, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64)
+                .addComponent(jLabel3)
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -254,16 +317,21 @@ public class FinancialPage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbl_depositos_price;
     private javax.swing.JLabel lbl_depositos_size;
     private javax.swing.JLabel lbl_saques_price;
     private javax.swing.JLabel lbl_saques_size;
+    private javax.swing.JTable table_closed_orders;
     private javax.swing.JTable table_movements;
     // End of variables declaration//GEN-END:variables
 
@@ -297,13 +365,25 @@ public class FinancialPage extends javax.swing.JFrame {
             
             ArrayList<Double> array_list_price_deposito = new ArrayList<>();
             ArrayList<Double> array_list_price_saque = new ArrayList<>();
+            ArrayList<Double> array_list_price_compra = new ArrayList<>();
+            ArrayList<Double> array_list_price_venda = new ArrayList<>();
             
             for (int row = 0; row < movements_list.size(); row++) {
                 Double price = Double.parseDouble((String) movements_list.get(row).get(3));
-                if (movements_list.get(row).get(2).equals("Saque")){
-                    array_list_price_saque.add(price);
-                }else{
-                    array_list_price_deposito.add(price);
+                String type = (String) movements_list.get(row).get(2);
+                switch (type){
+                    case "Saque" -> {
+                        array_list_price_saque.add(price);
+                    }
+                    case "Depósito" -> {
+                        array_list_price_deposito.add(price);
+                    }
+                    case "Compra" -> {
+                        array_list_price_compra.add(price);
+                    }
+                    case "Venda" -> {
+                        array_list_price_venda.add(price);
+                    }
                 }
                 model.addRow(new Object[]{
                     movements_list.get(row).get(0),
@@ -313,26 +393,38 @@ public class FinancialPage extends javax.swing.JFrame {
                 });
             }
             
-            loadMostradores(array_list_price_deposito, array_list_price_saque);
+            loadMostradores(array_list_price_deposito, array_list_price_saque, array_list_price_compra, array_list_price_venda);
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro Ao Listar Contas: " + ex);
         }
     }
     
-    private void loadMostradores(ArrayList<Double> array_list_price_deposito, ArrayList<Double> array_list_price_saque){
+    private void loadMostradores(ArrayList<Double> array_list_price_deposito, ArrayList<Double> array_list_price_saque, ArrayList<Double> array_list_price_compra, ArrayList<Double> array_list_price_venda){
         
         int numero_depositos = array_list_price_deposito.size();
         int numero_saques = array_list_price_saque.size();
+        int numero_compras = array_list_price_compra.size();
+        int numero_vendas = array_list_price_venda.size();
         double sum_depositos = 0;
         double sum_saques = 0;
+        double sum_compras = 0;
+        double sum_vendas = 0;
         
         for (int deposito = 0; deposito < numero_depositos; deposito++) {
             sum_depositos += array_list_price_deposito.get(deposito);
         }
         
-        for (int saque = 0; saque < numero_depositos; saque++) {
+        for (int saque = 0; saque < numero_saques; saque++) {
             sum_saques += array_list_price_saque.get(saque);
+        }
+        
+        for (int compra = 0; compra < numero_compras; compra++) {
+            sum_compras += array_list_price_compra.get(compra);
+        }
+        
+        for (int venda = 0; venda < numero_vendas; venda++) {
+            sum_vendas += array_list_price_venda.get(venda);
         }
         
         lbl_depositos_price.setText("$ " + String.valueOf(sum_depositos));
@@ -340,5 +432,32 @@ public class FinancialPage extends javax.swing.JFrame {
         lbl_saques_price.setText("$ " + String.valueOf(sum_saques));
         lbl_saques_size.setText("Número de Saques: " + String.valueOf(numero_saques));
                 
+    }
+    
+    private void loadOrdersClosed() {
+        OrderService service = new OrderService();
+        try {
+            ArrayList<OrderBuyStock> orders_list = service.getAllOrders(session_user.getId(), 0);
+            DefaultTableModel model = (DefaultTableModel) table_closed_orders.getModel();
+            model.setNumRows(0);
+
+            for (int row = 0; row < orders_list.size(); row++) {
+                int quantity = orders_list.get(row).getQuantity();
+                Double sold = orders_list.get(row).getSold_price();
+                Double returns = quantity * sold;
+                model.addRow(new Object[]{
+                    orders_list.get(row).getId(),
+                    orders_list.get(row).getStock(),
+                    quantity,
+                    orders_list.get(row).getBuy_price(),
+                    orders_list.get(row).getTotal_amount_invest(),
+                    sold,
+                    returns,
+                    orders_list.get(row).getTotal_amount_returns(),
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Get Orders: " + ex);
+        }
     }
 }

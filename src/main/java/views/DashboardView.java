@@ -7,12 +7,21 @@ package views;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import models.OrderBuyStock;
 import models.StockDTO;
 import models.UserDTO;
+import services.OrderService;
 import services.SessionsService;
 import services.StockService;
+import views.Dialogs.orders.BoletaDialogView;
+import views.Dialogs.orders.CloseOrderDialogView;
 import views.Dialogs.users.LogOutDialogView;
 import views.Dialogs.users.UpdateUserDialogView;
 
@@ -67,6 +76,10 @@ public class DashboardView extends javax.swing.JFrame {
         price_stock6 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
         btn_update_stocks = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table_opened_orders = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -92,6 +105,11 @@ public class DashboardView extends javax.swing.JFrame {
         price_stock1.setForeground(new java.awt.Color(255, 255, 255));
 
         jButton2.setText("Comprar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -105,11 +123,9 @@ public class DashboardView extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(price_stock1)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jButton2)))))
-                .addContainerGap(40, Short.MAX_VALUE))
+                            .addComponent(jButton2)
+                            .addComponent(price_stock1))))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,9 +134,9 @@ public class DashboardView extends javax.swing.JFrame {
                 .addComponent(title_stock1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(price_stock1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jButton2)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(225, 46, 46));
@@ -132,6 +148,11 @@ public class DashboardView extends javax.swing.JFrame {
         price_stock2.setForeground(new java.awt.Color(255, 255, 255));
 
         jButton3.setText("Comprar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -170,6 +191,11 @@ public class DashboardView extends javax.swing.JFrame {
         price_stock3.setForeground(new java.awt.Color(255, 255, 255));
 
         jButton4.setText("Comprar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -250,6 +276,11 @@ public class DashboardView extends javax.swing.JFrame {
         price_stock5.setForeground(new java.awt.Color(255, 255, 255));
 
         jButton6.setText("Comprar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -288,6 +319,11 @@ public class DashboardView extends javax.swing.JFrame {
         price_stock6.setForeground(new java.awt.Color(255, 255, 255));
 
         jButton7.setText("Comprar");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -323,6 +359,31 @@ public class DashboardView extends javax.swing.JFrame {
                 btn_update_stocksMouseClicked(evt);
             }
         });
+        btn_update_stocks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_update_stocksActionPerformed(evt);
+            }
+        });
+
+        table_opened_orders.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+            },
+            new String [] {
+                "ID", "Ação", "Quantidade", "Preço de Compra", "Total Investido", "Preço de Venda", "Lucro da Operação", "Situação"
+            }
+        ));
+        jScrollPane1.setViewportView(table_opened_orders);
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel1.setText("Ordens Abertas:");
+
+        jButton1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jButton1.setText("Fechar Ordem");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Minha Conta");
 
@@ -347,6 +408,11 @@ public class DashboardView extends javax.swing.JFrame {
         jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jMenuItem2MouseClicked(evt);
+            }
+        });
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
             }
         });
         jMenu2.add(jMenuItem2);
@@ -394,12 +460,13 @@ public class DashboardView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(txt_title, javax.swing.GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE)
+                .addComponent(txt_title, javax.swing.GroupLayout.DEFAULT_SIZE, 913, Short.MAX_VALUE)
                 .addGap(87, 87, 87))
+            .addComponent(jScrollPane1)
             .addGroup(layout.createSequentialGroup()
+                .addGap(169, 169, 169)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -412,16 +479,22 @@ public class DashboardView extends javax.swing.JFrame {
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(317, 317, 317)
+                        .addGap(282, 282, 282)
                         .addComponent(btn_update_stocks)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(txt_title)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_update_stocks)
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -433,7 +506,13 @@ public class DashboardView extends javax.swing.JFrame {
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton1))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -445,11 +524,12 @@ public class DashboardView extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu3MouseClicked
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       // TODO add your handling code here:
+        String stock = title_stock4.getText();
+        String price = price_stock4.getText();
+        oponBoletaDialog(stock, price);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void btn_update_stocksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_update_stocksMouseClicked
-        getStocks();
     }//GEN-LAST:event_btn_update_stocksMouseClicked
 
     private void jMenuItem1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseClicked
@@ -481,6 +561,57 @@ public class DashboardView extends javax.swing.JFrame {
         page.setVisible(true);
         dispose();
     }//GEN-LAST:event_jMenu4MouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String stock = title_stock1.getText();
+        String price = price_stock1.getText();
+        oponBoletaDialog(stock, price);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String stock = title_stock2.getText();
+        String price = price_stock2.getText();
+        oponBoletaDialog(stock, price);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        String stock = title_stock3.getText();
+        String price = price_stock3.getText();
+        oponBoletaDialog(stock, price);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        String stock = title_stock5.getText();
+        String price = price_stock5.getText();
+        oponBoletaDialog(stock, price);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        String stock = title_stock6.getText();
+        String price = price_stock6.getText();
+        oponBoletaDialog(stock, price);
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        AccountControlView page = new AccountControlView();
+        page.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void btn_update_stocksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_update_stocksActionPerformed
+        getStocks();
+    }//GEN-LAST:event_btn_update_stocksActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        OrderBuyStock order = getDataRowSelected();
+        if (!Objects.isNull(order)){
+            order.setUser_id(session_user.getId());
+            new CloseOrderDialogView(null,true, order).show();
+            loadOpenOrders();
+        }else{
+            JOptionPane.showMessageDialog(null, "Erro ao Buscar os dados da Tabela");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -519,12 +650,14 @@ public class DashboardView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_update_stocks;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -539,12 +672,14 @@ public class DashboardView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel price_stock1;
     private javax.swing.JLabel price_stock2;
     private javax.swing.JLabel price_stock3;
     private javax.swing.JLabel price_stock4;
     private javax.swing.JLabel price_stock5;
     private javax.swing.JLabel price_stock6;
+    private javax.swing.JTable table_opened_orders;
     private javax.swing.JLabel title_stock1;
     private javax.swing.JLabel title_stock2;
     private javax.swing.JLabel title_stock3;
@@ -555,6 +690,7 @@ public class DashboardView extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private final UserDTO session_user;
+    Map<String, Float> map_stocks = new HashMap<String, Float>();
     
     private void validSession() {
         SessionsService functions = new SessionsService();
@@ -585,6 +721,7 @@ public class DashboardView extends javax.swing.JFrame {
                 StockDTO stock = stock_list.get(i);
                 String title = stock.getSymbol();
                 String price = Float.toString(stock.getAsk());
+                map_stocks.put(title, stock.getAsk());
                 switch (title) {
                     case "AAPL" -> {
                         title_stock1.setText(title);
@@ -612,8 +749,74 @@ public class DashboardView extends javax.swing.JFrame {
                     }
                 }
             }
+            loadOpenOrders();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Get Stocks: " + ex);
         }
     }
+    
+    private void oponBoletaDialog(String Stock, String price){
+        new BoletaDialogView(this,true, Stock, price, session_user.getId()).show();
+        loadOpenOrders();
+    }
+
+    private void loadOpenOrders() {
+        OrderService service = new OrderService();
+        try {
+            ArrayList<OrderBuyStock> orders_list = service.getAllOrders(session_user.getId(), 1);
+            DefaultTableModel model = (DefaultTableModel) table_opened_orders.getModel();
+            model.setNumRows(0);
+
+            for (int row = 0; row < orders_list.size(); row++) {
+                Float actual_stock_price = map_stocks.get(orders_list.get(row).getStock());
+                Double total_invest = orders_list.get(row).getTotal_amount_invest();
+                int quantity = orders_list.get(row).getQuantity();
+                double value_return = calcValueReturns(total_invest, actual_stock_price, quantity);
+                model.addRow(new Object[]{
+                    orders_list.get(row).getId(),
+                    orders_list.get(row).getStock(),
+                    quantity,
+                    orders_list.get(row).getBuy_price(),
+                    total_invest,
+                    actual_stock_price,
+                    value_return,
+                    "ABERTA"
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Get Orders: " + ex);
+        }
+    }
+    
+    private Double calcValueReturns(Double total_invest, Float sold_price, int quantity){
+        Double sold_price_convert;
+        sold_price_convert = Double.valueOf(sold_price.toString());
+        Double quantity_sold = sold_price_convert * quantity;
+        Double value_returns = total_invest - quantity_sold;
+        return value_returns;
+    }
+    
+    private OrderBuyStock getDataRowSelected(){
+        OrderBuyStock order = new OrderBuyStock();
+        int index_row = table_opened_orders.getSelectedRow();
+        if (index_row >= 0){
+            try{
+                int id_selected = Integer.parseInt(table_opened_orders.getModel().getValueAt(index_row, 0).toString());
+                order.setId(id_selected);
+                order.setStock(table_opened_orders.getModel().getValueAt(index_row, 1).toString());
+                order.setQuantity(Integer.parseInt(table_opened_orders.getModel().getValueAt(index_row, 2).toString()));
+                order.setBuy_price((double) table_opened_orders.getModel().getValueAt(index_row, 3));
+                order.setTotal_amount_invest((double) table_opened_orders.getModel().getValueAt(index_row, 4));
+                order.setSold_price(Double.valueOf(table_opened_orders.getModel().getValueAt(index_row, 5).toString()));
+                order.setTotal_amount_returns((double) table_opened_orders.getModel().getValueAt(index_row, 6));
+            } catch(NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao Carregar os Dados: " + ex);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Selecione alguma Ordem para Fechar !!");
+        }
+        
+        return order;
+    }
+
 }
