@@ -12,6 +12,7 @@ views\FinancialPage$1.class
 models\StockDTO.class
 views\CreateUserFormView$2.class
 views\AccountControlView$7.class
+views\Dialogs\users\LoginDialogView$1.class
 views\DashboardView$16.class
 views\DashboardView$13.class
 views\LoginFormView$2.class
@@ -58,6 +59,7 @@ views\Dialogs\financial\FinancialControlDialogView.class
 views\Dialogs\orders\BoletaDialogView$3.class
 views\BrokerControlView$2.class
 views\Dialogs\account\DeleteAccountDialogView.class
+views\Dialogs\users\LoginDialogView.class
 views\CreateUserFormView$3.class
 views\DashboardView.class
 views\DashboardView$17.class
@@ -96,4 +98,5 @@ views\Dialogs\financial\FinancialControlDialogView$2.class
 views\Dialogs\broker\DeleteBrokerDialogView$2$1.class
 views\DashboardView$7.class
 views\AccountControlView$3.class
+views\Dialogs\users\LoginDialogView$1$1.class
 views\DashboardView$15.class

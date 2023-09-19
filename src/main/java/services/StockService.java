@@ -19,7 +19,7 @@ public class StockService {
     private final String apiKey = "API_KEY3915N1U4NT762GD0SSRTNUMAKD5U7CR7";
     
     public List<StockDTO> find_stocks(String stocks) throws ClientProtocolException, IOException{
-        String response = "[{'symbol':'AAPL','ask':177.08,'bid':177.06,'asize':3,'bsize':15,'timestamp':1694529526609},{'symbol':'TSLA','ask':274.02,'bid':273.97,'asize':2,'bsize':9,'timestamp':1694529526491},{'symbol':'GOGL','ask':7.39,'bid':7.38,'asize':30,'bsize':1,'timestamp':1694529518185},{'symbol':'AMZN','ask':141.3,'bid':141.29,'asize':5,'bsize':4,'timestamp':1694529526480},{'symbol':'MSFT','ask':334.26,'bid':334.23,'asize':1,'bsize':3,'timestamp':1694529526477},{'symbol':'IBM','ask':147.01,'bid':147,'asize':2,'bsize':5,'timestamp':1694529522342}]";
+        String response = "[{'symbol':'AAPL','ask':177.08,'bid':177.06,'asize':3,'bsize':15,'timestamp':1694529526609},{'symbol':'TSLA','ask':274.02,'bid':273.97,'asize':2,'bsize':9,'timestamp':1694529526491},{'symbol':'GOGL','ask':7.39,'bid':7.38,'asize':30,'bsize':1,'timestamp':1694529518185},{'symbol':'AMZN','ask':159.5,'bid':141.29,'asize':5,'bsize':4,'timestamp':1694529526480},{'symbol':'MSFT','ask':334.26,'bid':334.23,'asize':1,'bsize':3,'timestamp':1694529526477},{'symbol':'IBM','ask':147.01,'bid':147,'asize':2,'bsize':5,'timestamp':1694529522342}]";
         
         Gson gson = new Gson();
         StockDTO[] list_stocks_response = gson.fromJson(response, StockDTO[].class);

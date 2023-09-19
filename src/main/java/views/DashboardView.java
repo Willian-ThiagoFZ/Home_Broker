@@ -369,7 +369,7 @@ public class DashboardView extends javax.swing.JFrame {
             new Object [][] {
             },
             new String [] {
-                "ID", "Ação", "Quantidade", "Preço de Compra", "Total Investido", "Preço de Venda", "Lucro da Operação", "Situação"
+                "ID", "Ação", "Quantidade", "Preço de Compra", "Total Investido", "Preço de Venda", "Total da Venda","Lucro da Operação", "Situação"
             }
         ));
         jScrollPane1.setViewportView(table_opened_orders);
@@ -460,34 +460,34 @@ public class DashboardView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(txt_title, javax.swing.GroupLayout.DEFAULT_SIZE, 913, Short.MAX_VALUE)
+                .addComponent(txt_title, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
                 .addGap(87, 87, 87))
             .addComponent(jScrollPane1)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(169, 169, 169)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(65, 65, 65)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(56, 56, 56)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(282, 282, 282)
-                        .addComponent(btn_update_stocks)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(196, 196, 196)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(113, 113, 113)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(112, 112, 112)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(505, 505, 505)
+                        .addComponent(btn_update_stocks)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -771,7 +771,8 @@ public class DashboardView extends javax.swing.JFrame {
                 Float actual_stock_price = map_stocks.get(orders_list.get(row).getStock());
                 Double total_invest = orders_list.get(row).getTotal_amount_invest();
                 int quantity = orders_list.get(row).getQuantity();
-                double value_return = calcValueReturns(total_invest, actual_stock_price, quantity);
+                double value_return = calcValueReturns(actual_stock_price, quantity);
+                double lucro = value_return - total_invest;
                 model.addRow(new Object[]{
                     orders_list.get(row).getId(),
                     orders_list.get(row).getStock(),
@@ -780,6 +781,7 @@ public class DashboardView extends javax.swing.JFrame {
                     total_invest,
                     actual_stock_price,
                     value_return,
+                    lucro,
                     "ABERTA"
                 });
             }
@@ -788,12 +790,11 @@ public class DashboardView extends javax.swing.JFrame {
         }
     }
     
-    private Double calcValueReturns(Double total_invest, Float sold_price, int quantity){
+    private Double calcValueReturns(Float sold_price, int quantity){
         Double sold_price_convert;
         sold_price_convert = Double.valueOf(sold_price.toString());
         Double quantity_sold = sold_price_convert * quantity;
-        Double value_returns = total_invest - quantity_sold;
-        return value_returns;
+        return quantity_sold;
     }
     
     private OrderBuyStock getDataRowSelected(){
@@ -808,12 +809,13 @@ public class DashboardView extends javax.swing.JFrame {
                 order.setBuy_price((double) table_opened_orders.getModel().getValueAt(index_row, 3));
                 order.setTotal_amount_invest((double) table_opened_orders.getModel().getValueAt(index_row, 4));
                 order.setSold_price(Double.valueOf(table_opened_orders.getModel().getValueAt(index_row, 5).toString()));
-                order.setTotal_amount_returns((double) table_opened_orders.getModel().getValueAt(index_row, 6));
+                order.setTotal_amount_returns((double) table_opened_orders.getModel().getValueAt(index_row, 7));
             } catch(NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao Carregar os Dados: " + ex);
+                return null;
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Selecione alguma Ordem para Fechar !!");
+            return null;
         }
         
         return order;
