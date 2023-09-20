@@ -691,6 +691,7 @@ public class DashboardView extends javax.swing.JFrame {
 
     private final UserDTO session_user;
     Map<String, Float> map_stocks = new HashMap<String, Float>();
+    final LoadingView load = new LoadingView();
     
     private void validSession() {
         SessionsService functions = new SessionsService();
@@ -715,8 +716,10 @@ public class DashboardView extends javax.swing.JFrame {
     private void getStocks() {
         StockService service = new StockService();
         List<StockDTO> stock_list;
+        load.setVisible(true);
         try {
             stock_list = service.find_stocks("AAPL,TSLA,GOGL,AMZN,MSFT,IBM");
+            //stock_list = service.find_stocks_test();
             for (int i = 0; i < stock_list.size(); i++) {
                 StockDTO stock = stock_list.get(i);
                 String title = stock.getSymbol();
@@ -750,6 +753,7 @@ public class DashboardView extends javax.swing.JFrame {
                 }
             }
             loadOpenOrders();
+            load.dispose();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Get Stocks: " + ex);
         }

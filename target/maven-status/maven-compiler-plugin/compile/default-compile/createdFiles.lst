@@ -70,6 +70,7 @@ views\Dialogs\users\UpdateUserDialogView.class
 views\Dialogs\account\UpdateBalanceAccountDialogView$3.class
 views\LoginFormView$1.class
 views\CreateUserFormView.class
+views\LoadingView$1.class
 views\BrokerControlView$4.class
 views\BrokerControlView.class
 views\Dialogs\account\DeleteAccountDialogView$2.class
@@ -78,6 +79,7 @@ views\AccountControlView$5.class
 views\Dialogs\orders\BoletaDialogView.class
 views\Dialogs\financial\FinancialControlDialogView$2$1.class
 models\BrokerDTO.class
+views\LoadingView.class
 views\Dialogs\users\LogOutDialogView.class
 views\Dialogs\users\UpdateUserDialogView$1.class
 services\OrderService.class
