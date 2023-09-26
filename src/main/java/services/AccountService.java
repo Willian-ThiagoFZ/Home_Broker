@@ -22,7 +22,7 @@ public class AccountService {
         conn = new ConnectionMysql().connectDB();
 
         try {
-            String insert = "INSERT INTO grupo5_willian.accounts (user_id, broker_id, number_account, type_account, balance) VALUES(?, ?, ?, ?, ?);";
+            String insert = "INSERT INTO accounts (user_id, broker_id, number_account, type_account, balance) VALUES(?, ?, ?, ?, ?);";
             pstm = conn.prepareStatement(insert);
             pstm.setInt(1, new_account.getUser_id());
             pstm.setInt(2, new_account.getBroker_id());
@@ -44,7 +44,7 @@ public class AccountService {
         conn = new ConnectionMysql().connectDB();
 
         try {
-            String delete = "DELETE FROM grupo5_willian.accounts WHERE id=?;";
+            String delete = "DELETE FROM accounts WHERE id=?;";
             pstm = conn.prepareStatement(delete);
             pstm.setInt(1, id_account);
             pstm.execute();
@@ -61,7 +61,7 @@ public class AccountService {
         conn = new ConnectionMysql().connectDB();
 
         try {
-            String update = "UPDATE grupo5_willian.accounts SET balance=? WHERE id=?;";
+            String update = "UPDATE accounts SET balance=? WHERE id=?;";
             pstm = conn.prepareStatement(update);
             pstm.setDouble(1, new_balance);
             pstm.setInt(2, id_account);
@@ -77,7 +77,7 @@ public class AccountService {
     
     public ArrayList<AccountDTO> getAllAccounts(int user_id) throws SQLException{
         conn = new ConnectionMysql().connectDB();
-        String select = "select * from grupo5_willian.accounts where user_id = ?;";
+        String select = "select * from accounts where user_id = ?;";
         
         try{
             pstm = conn.prepareStatement(select);
@@ -117,8 +117,8 @@ public class AccountService {
             	a.type_account,
             	a.balance
             from
-            	grupo5_willian.accounts a
-            join grupo5_willian.broker b on
+            	accounts a
+            join broker b on
             	b.id  = a.broker_id
             where 
             	a.type_account = 'Conta Real'
@@ -169,8 +169,8 @@ public class AccountService {
             	a.type_account,
             	a.balance
             from
-            	grupo5_willian.accounts a
-            join grupo5_willian.broker b on
+            	accounts a
+            join broker b on
             	b.id  = a.broker_id
             where
             	a.user_id = ?
@@ -219,13 +219,13 @@ public class AccountService {
                 id,
                 balance
             from
-                grupo5_willian.accounts
+                accounts
             where
                 id = (
                 select
                     o.account_id
                 from
-                    grupo5_willian.orders o
+                    orders o
                 where
                     o.id = ?);
         """;

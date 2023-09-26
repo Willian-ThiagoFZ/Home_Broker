@@ -20,8 +20,8 @@ public class ConnectionMysql {
         }
         
         try{
-            //String url = "jdbc:mysql://200.195.178.52/grupo5_willian?user=grupo5&password=grupo5";
-            String url = "jdbc:mysql://localhost/grupo5_willian?user=root&password=rootadmin";
+            String url = "jdbc:mysql://200.195.178.52/grupo5_willian?user=grupo5&password=xpJHCEEGbU4mSys2";
+            //String url = "jdbc:mysql://localhost/grupo5_willian?user=root&password=adminroot";
             conn = DriverManager.getConnection(url);
         }catch (SQLException error){
             JOptionPane.showMessageDialog(null, "Error on Conect in Database: " + error.getMessage());
