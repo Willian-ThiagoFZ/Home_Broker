@@ -5,6 +5,7 @@ views\FinancialPage$4.class
 views\AccountControlView$4.class
 views\FinancialPage.class
 models\MovementAccountDTO.class
+views\BrokerControlView$6.class
 models\UserDTO.class
 views\BrokerControlView$3.class
 views\Dialogs\broker\DeleteBrokerDialogView.class

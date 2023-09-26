@@ -718,8 +718,8 @@ public class DashboardView extends javax.swing.JFrame {
         List<StockDTO> stock_list;
         load.setVisible(true);
         try {
-            stock_list = service.find_stocks("AAPL,TSLA,GOGL,AMZN,MSFT,IBM");
-            //stock_list = service.find_stocks_test();
+            //stock_list = service.find_stocks("AAPL,TSLA,GOGL,AMZN,MSFT,IBM");
+            stock_list = service.find_stocks_test();
             for (int i = 0; i < stock_list.size(); i++) {
                 StockDTO stock = stock_list.get(i);
                 String title = stock.getSymbol();
