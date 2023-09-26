@@ -36,9 +36,16 @@ public class DashboardView extends javax.swing.JFrame {
      */
     public DashboardView() {
         this.session_user = new UserDTO();
-        initComponents();
-        validSession();
-        getStocks();
+        boolean valid = validSession();
+        if(valid){
+            this.setVisible(true);
+            initComponents();
+            txt_title.setText("Bem-Vindo "+session_user.getName()+" - Uni Invest");
+            getStocks();
+        }else{
+            LoginFormView page = new LoginFormView();
+            page.setVisible(true);
+        }
     }
 
     /**
@@ -693,24 +700,24 @@ public class DashboardView extends javax.swing.JFrame {
     Map<String, Float> map_stocks = new HashMap<String, Float>();
     final LoadingView load = new LoadingView();
     
-    private void validSession() {
+    private boolean validSession() {
         SessionsService functions = new SessionsService();
         try {
             ResultSet result = functions.getActualSession(true);
             if (!result.next()){
-                LoginFormView page = new LoginFormView();
-                page.setVisible(true);
-                dispose();
+                return false;
             }else{
                 session_user.setName(result.getString("name"));
                 session_user.setId(result.getInt("id"));
                 session_user.setCpf(result.getString("cpf"));
                 session_user.setEmail(result.getString("email"));
-                txt_title.setText("Bem-Vindo "+session_user.getName()+" - Uni Invest");
+                return true;
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Dashboard Init: " + ex);
         }
+        
+        return false;
     }
     
     private void getStocks() {

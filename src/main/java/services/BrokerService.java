@@ -20,7 +20,7 @@ public class BrokerService {
         conn = new ConnectionMysql().connectDB();
 
         try {
-            String insert = "INSERT INTO grupo5_willian.broker (name) VALUES(?);";
+            String insert = "INSERT INTO broker (name) VALUES(?);";
             pstm = conn.prepareStatement(insert);
             pstm.setString(1, broker_name);
             pstm.execute();
@@ -37,7 +37,7 @@ public class BrokerService {
         conn = new ConnectionMysql().connectDB();
 
         try {
-            String update = "UPDATE grupo5_willian.broker SET name=? WHERE id=?;";
+            String update = "UPDATE broker SET name=? WHERE id=?;";
             pstm = conn.prepareStatement(update);
             pstm.setString(1, broker_name);
             pstm.setInt(2, id_broker);
@@ -55,7 +55,7 @@ public class BrokerService {
         conn = new ConnectionMysql().connectDB();
 
         try {
-            String delete = "DELETE FROM grupo5_willian.broker WHERE id=?;";
+            String delete = "DELETE FROM broker WHERE id=?;";
             pstm = conn.prepareStatement(delete);
             pstm.setInt(1, id_broker);
             pstm.execute();
@@ -70,7 +70,7 @@ public class BrokerService {
     
     public ArrayList<BrokerDTO> getAllBrokers() throws SQLException{
         conn = new ConnectionMysql().connectDB();
-        String select = "select * from grupo5_willian.broker order by name;";
+        String select = "select * from broker order by name;";
         
         try{
             pstm = conn.prepareStatement(select);

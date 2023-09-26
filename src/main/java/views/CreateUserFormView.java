@@ -154,6 +154,9 @@ public class CreateUserFormView extends javax.swing.JFrame {
             } else {
                 services.createNewUser(new_user);
                 JOptionPane.showMessageDialog(null, "Usuário criado com Sucesso, realize o Login");
+                LoginFormView page = new LoginFormView();
+                page.setVisible(true);
+                dispose();
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());

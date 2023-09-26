@@ -21,7 +21,7 @@ public class FinancialService {
         AccountService account_service = new AccountService();
 
         try {
-            String insert = "INSERT INTO grupo5_willian.movement_account (account_id, typeMovement, price, user_id) VALUES(?, ?, ?, ?);";
+            String insert = "INSERT INTO movement_account (account_id, typeMovement, price, user_id) VALUES(?, ?, ?, ?);";
             pstm = conn.prepareStatement(insert);
             pstm.setInt(1, movement.getAccount_id());
             pstm.setString(2, movement.getTypeMovement());
@@ -49,10 +49,10 @@ public class FinancialService {
                 m.typeMovement,
                 m.price
             from
-                grupo5_willian.movement_account m
-            join grupo5_willian.accounts a on
+                movement_account m
+            join accounts a on
                 a.id = m.account_id
-            join grupo5_willian.broker b on
+            join broker b on
                 b.id = a.broker_id 
             where
                 m.user_id = ?;

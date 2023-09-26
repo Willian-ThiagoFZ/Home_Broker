@@ -6,7 +6,7 @@ public class Home_broker {
 
     public static void main(String[] args) {
         
-        new DashboardView().setVisible(true);
+        new DashboardView();
         
     }
 }

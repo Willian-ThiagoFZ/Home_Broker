@@ -19,7 +19,7 @@ public class SessionsService {
         conn = new ConnectionMysql().connectDB();
         
         try {
-            String insert = "INSERT INTO grupo5_willian.sessions (create_at, expire_at, user_id) VALUES(?, ?, ?);";
+            String insert = "INSERT INTO sessions (create_at, expire_at, user_id) VALUES(?, ?, ?);";
             pstm = conn.prepareStatement(insert);
             Date today = new Date();
             Date tomorrow;
@@ -53,15 +53,15 @@ public class SessionsService {
                     u.cpf,
                     u.email
                 from
-                    grupo5_willian.sessions s2
-                join grupo5_willian.users u on
+                    sessions s2
+                join users u on
                     u.id = s2.user_id
                 where
                     s2.id = (
                     select
                         max(id)
                     from
-                        grupo5_willian.sessions s
+                        sessions s
                     where
                         active = 1);
             """;
@@ -69,7 +69,7 @@ public class SessionsService {
             ResultSet rs = pstm.executeQuery();
             return rs;
         } catch (SQLException error) {
-            JOptionPane.showMessageDialog(null, "Service Create Session: " + error.getMessage());
+            JOptionPane.showMessageDialog(null, "Service Get Actual Session: " + error.getMessage());
         }
         
         return null;
@@ -81,7 +81,7 @@ public class SessionsService {
                 SELECT
                     s.id
                 FROM
-                    grupo5_willian.SESSIONS S
+                    sessions s
                 WHERE
                     ACTIVE = 1 and 
                     expire_at <= CURDATE()
@@ -91,14 +91,14 @@ public class SessionsService {
             
             while (rs.next()) {
                 String id_session = rs.getString("id");
-                String update = "UPDATE grupo5_willian.SESSIONS SET active = 0 WHERE id = ?";
+                String update = "UPDATE sessions SET active = 0 WHERE id = ?";
                 pstm = conn.prepareStatement(update);
                 pstm.setString(1, id_session);
                 pstm.execute();
             }
             
         } catch (SQLException error) {
-            JOptionPane.showMessageDialog(null, "Service Create Session: " + error.getMessage());
+            JOptionPane.showMessageDialog(null, "Service Expires Session: " + error.getMessage());
         }finally{
             pstm.close();
         }
@@ -108,11 +108,11 @@ public class SessionsService {
         conn = new ConnectionMysql().connectDB();
         
         try {
-            String query = "UPDATE grupo5_willian.SESSIONS SET active = 0 WHERE active = 1;";
+            String query = "UPDATE sessions SET active = 0 WHERE active = 1;";
             pstm = conn.prepareStatement(query);
             pstm.execute();
         } catch (SQLException error) {
-            JOptionPane.showMessageDialog(null, "Service Create Session: " + error.getMessage());
+            JOptionPane.showMessageDialog(null, "Service Logout Session: " + error.getMessage());
         }finally{
             pstm.close();
         }

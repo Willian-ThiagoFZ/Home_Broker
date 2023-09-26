@@ -34,7 +34,7 @@ public class OrderService {
         conn = new ConnectionMysql().connectDB();
 
         try {
-            String insert = "INSERT INTO grupo5_willian.orders (account_id, quantity, stock, buy_price, total_amount_invest, user_id) VALUES(?, ?, ?, ?, ?, ?);";
+            String insert = "INSERT INTO orders (account_id, quantity, stock, buy_price, total_amount_invest, user_id) VALUES(?, ?, ?, ?, ?, ?);";
             pstm = conn.prepareStatement(insert);
             pstm.setInt(1, order.getAccount_id());
             pstm.setInt(2, order.getQuantity());
@@ -57,7 +57,7 @@ public class OrderService {
         conn = new ConnectionMysql().connectDB();
 
         try {
-            String update = "UPDATE grupo5_willian.orders SET sold_price=?, total_amount_returns=?, open_operation=0 WHERE id=?;";
+            String update = "UPDATE orders SET sold_price=?, total_amount_returns=?, open_operation=0 WHERE id=?;";
             pstm = conn.prepareStatement(update);
             pstm.setDouble(1, order.getSold_price());
             pstm.setDouble(2, order.getTotal_amount_returns());
@@ -77,7 +77,7 @@ public class OrderService {
     
     public ArrayList<OrderBuyStock> getAllOrders(int user_id, int orders_opened) throws SQLException{
         conn = new ConnectionMysql().connectDB();
-        String select = "select id, quantity, stock, buy_price, total_amount_invest, sold_price, total_amount_returns from grupo5_willian.orders where user_id = ? and open_operation = ?;";
+        String select = "select id, quantity, stock, buy_price, total_amount_invest, sold_price, total_amount_returns from orders where user_id = ? and open_operation = ?;";
         
         try{
             pstm = conn.prepareStatement(select);
