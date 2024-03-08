@@ -16,7 +16,7 @@ import org.apache.http.util.EntityUtils;
 
 public class StockService {
     
-    private final String apiKey = "API_KEY3915N1U4NT762GD0SSRTNUMAKD5U7CR7";
+    private final String apiKey = "API_KEY9c0AMPNKUPDIUUHRUHL48M6YW76VBQZ4";
     
     public List<StockDTO> find_stocks(String stocks) throws ClientProtocolException, IOException{        
         String url = "https://api.finage.co.uk/last/stocks/?apikey="+apiKey+"&symbols="+stocks;
